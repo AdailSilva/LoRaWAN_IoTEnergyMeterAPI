@@ -1,0 +1,18 @@
+Start server command:
+
+python -m SimpleHTTPServer 8000
+
+
+Note:
+
+Call the files indicating the Application Server address.
+
+No caso o Server em Python (SimpleHTTPServer)
+- - -> So the requests will come with the Headers: OPTIONS. <- - -
+
+If you just open a file and run it, it won't happen.
+
+
+--- EXAMPLES --- 
+Right:	http://localhost:8000/get-categories.html
+Wrong:	file:///home/adailsilva/Apps/SimpleHTTPServer/get-categories.html

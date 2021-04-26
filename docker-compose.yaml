@@ -1,0 +1,65 @@
+version: '3.3'
+
+services:
+    # Service 1: definition of mysql database;
+    db:
+      image: mysql:latest
+      container_name: mysql-iotenergymeter
+      environment:
+#        - MYSQL_ALLOW_EMPTY_PASSWORD
+#        - MYSQL_RANDOM_ROOT_PASSWORD
+        - MYSQL_ROOT_PASSWORD=Hacker101
+#        - MYSQL_USER=root
+
+      ports:
+        - "3306:3306"
+      restart: always
+      
+    
+    # Service 2: definition of phpMyAdmin;
+    phpmyadmin:
+      image: phpmyadmin:latest
+      container_name: phpmyadmin-iotenergymeter
+      ports:
+        - "8082:80"
+      restart: always
+        
+      depends_on:
+        - db
+      environment:
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: Hacker101
+    
+    
+    # Service 3: definition of your spring-boot app.
+    customerservice:                        # It is just a name, which will be used only in this file.
+      image: iotenergymeter-service         # Name of the image after dockerfile executes
+      container_name: iotenergymeter-api    # Name of the container created from docker image
+      build:
+        context: .                          # Docker file path (. means root directory)
+        dockerfile: Dockerfile              # Docker file name
+      ports:
+        - "8081:8081"                       # Docker containter port with your os port
+      restart: always
+        
+      depends_on:                           # Define dependencies of this app
+        - db                                # Dependency name (which is defined with this name 'db' in this file earlier)
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://mysql-iotenergymeter:3306/iotenergymeterapi?createDatabaseIfNotExist=TRUE&autoReconnect=TRUE&useSSL=FALSE&allowPublicKeyRetrieval=TRUE&useUnicode=YES&characterEncoding=UTF-8
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: Hacker101
+
+# To Run:
+# mnv clean
+# ./mvnw clean
+# mvn install -DskipTests
+# ./mvnw install -DskipTests
+# 
+# Or:
+# mvn clean package
+# 
+# And:
+# docker-compose up --build
+# 
+# Or:
+# docker-compose up --build -d

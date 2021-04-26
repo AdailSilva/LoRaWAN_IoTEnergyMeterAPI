@@ -1,0 +1,29 @@
+<html>
+<body>
+
+	<button onclick="enviar()">Buscar access token</button>
+
+	<script>
+		function printResponse() {
+			console.log(this.responseText);
+		}
+
+		function enviar() {
+			var req = new XMLHttpRequest();
+			req.addEventListener("load", printResponse);
+
+			//	req.open("POST", "http://localhost:8080/oauth/token");
+			req.open("POST", "https://c916d6be.ngrok.io/oauth/token");
+
+			req.setRequestHeader("Authorization",
+					"Basic YW5ndWxhcjpzZW5oYURvQW5ndWxhcg==");
+			req.setRequestHeader("Content-Type",
+					"application/x-www-form-urlencoded");
+
+			req
+					.send("client_id=angular&username=admin@adailsilva.com&password=Hacker101&grant_type=password");
+		}
+	</script>
+
+</body>
+</html>
